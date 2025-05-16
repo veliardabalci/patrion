@@ -1,0 +1,1133 @@
+{
+	"info": {
+		"_postman_id": "743b2b48-d238-4351-860d-9f6e7fd43475",
+		"name": "Patrion Case Study",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39627695",
+		"_collection_link": "https://carsoft-5288.postman.co/workspace/Carsoft-Workspace~dd4d86bd-f54d-48dc-8cc3-5629b06321c6/collection/39627695-743b2b48-d238-4351-860d-9f6e7fd43475?action=share&source=collection_link&creator=39627695"
+	},
+	"item": [
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/ping",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/health",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\",\n    \"password\": \"password123\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZTBiZjI1Ni1mOWQxLTQ5ODItYjY4YS0wYThiNzQwNGU4NzAiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IlN5c3RlbUFkbWluIiwiaWF0IjoxNzQ3MjIzODg4LCJleHAiOjE3NDc4Mjg2ODh9.8VjBBWQ6FgKddZKo6f4fdPCTARk7DudkLJllgQgig18\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/refresh",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "Create Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Company\",\n    \"description\": \"A test company\",\n    \"address\": \"Test Address\",\n    \"phone\": \"1234567890\",\n    \"website\": \"https://testcompany.com\",\n    \"companyAdminId\": \"d5c6bd2d-c010-413c-9278-0375d1533d63\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/companies",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Companies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/companies",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/companies/COMPANY_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies",
+								"COMPANY_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Company",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Company Name\",\n    \"description\": \"Updated description\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/companies/COMPANY_ID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"companies",
+								"COMPANY_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User For Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"newuser6@example.com\",\n    \"firstName\": \"New\",\n    \"lastName\": \"User\",\n    \"password\": \"password123\",\n    \"role\": \"CompanyAdmin\",\n    \"companyId\": \"a062de84-70bd-4f3e-818f-68ed4d48dde4\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Company",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_SYSTEM_ADMIN_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/companies/a062de84-70bd-4f3e-818f-68ed4d48dde4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies",
+								"a062de84-70bd-4f3e-818f-68ed4d48dde4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users By Company ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/company/COMPANY_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"company",
+								"COMPANY_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My-Company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <JWT_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/companies/my-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies",
+								"my-company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Company Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <JWT_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/companies/my-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"companies",
+								"my-company"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User Create By Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer SYSTEM_ADMIN_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"companyUser@example.com\",\n    \"firstName\": \"Company\",\n    \"lastName\": \"User\",\n    \"password\": \"password123\",\n    \"role\": \"User\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/admin-create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"admin-create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\":\"İzinli\",\n    \"lastName\":\"Kullanıcı\",\n    \"companyId\":\"2b4c91f5-9e72-42da-a1a5-c5f3f7a52742\",\n    \"role\":\"User\",\n    \"isActive\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/8b58b502-8f0b-4433-b651-6b89fd5de0b8",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"8b58b502-8f0b-4433-b651-6b89fd5de0b8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/USER_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"USER_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/USER_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"USER_ID"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sensors",
+			"item": [
+				{
+					"name": "Create Sensor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sensor_id\": \"temp_sensor_01\",\n    \"name\": \"Sıcaklık Sensörü 1\",\n    \"description\": \"Ana depo sıcaklık sensörü\",\n    \"location\": \"Depo - Raf A1\",\n    \"type\": \"temperature\",\n    \"companyId\": \"BURAYA_COMPANY_ID_GELECEK\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/sensors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Sensors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/registry",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"registry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sensors By Company ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/sensors/registry",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"registry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Sensor ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/registry/f6b16a23-d38d-4370-a240-9cf577b1f194",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"registry",
+								"f6b16a23-d38d-4370-a240-9cf577b1f194"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sensor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Güncellenmiş Sensör Adı\",\n    \"description\": \"Güncellenmiş açıklama\",\n    \"isActive\": true\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/sensors/registry/SENSOR_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"registry",
+								"SENSOR_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Sensor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/registry/SENSOR_ID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"registry",
+								"SENSOR_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Sensors Has Record",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sensor Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/temp_sensor_01/latest?limit=5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"temp_sensor_01",
+								"latest"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sensor Data Range",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer BURAYA_TOKEN_GELECEK"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/temp_sensor_01/range?start=1620000000&end=1630000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"temp_sensor_01",
+								"range"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "1620000000"
+								},
+								{
+									"key": "end",
+									"value": "1630000000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sensor Grant",
+			"item": [
+				{
+					"name": "Grant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sensorId\": \"e1fa22fe-abaa-429b-880b-620dc3bf50ff\",\n    \"userId\": \"8b58b502-8f0b-4433-b651-6b89fd5de0b8\",\n    \"canView\": true,\n    \"canEdit\": true,\n    \"canDelete\": false,\n    \"description\": \"Kullanıcıya test sensörü için görüntüleme ve düzenleme izni\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/sensors/access",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"access"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Grant",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sensorId\": \"e1fa22fe-abaa-429b-880b-620dc3bf50ff\",\n    \"userId\": \"8b58b502-8f0b-4433-b651-6b89fd5de0b8\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/sensors/access",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"access"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User's sensor",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/access/user/8b58b502-8f0b-4433-b651-6b89fd5de0b8",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"access",
+								"user",
+								"8b58b502-8f0b-4433-b651-6b89fd5de0b8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users Who can access to sensor",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/access/sensor/00000000-0000-0000-0000-000000000001",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"access",
+								"sensor",
+								"00000000-0000-0000-0000-000000000001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Sensors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/sensors/my-access",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"sensors",
+								"my-access"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Get All Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/logs",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Logs By Sensor ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/logs/sensor/SENSOR_ID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"logs",
+								"sensor",
+								"SENSOR_ID"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Logs By User ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/logs/user/USER_ID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"logs",
+								"user",
+								"USER_ID"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMTFhN2IyNS0zMjBjLTQ3YzQtOWI1OS04ZWVhOTUyZWYxMzIiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IlN5c3RlbUFkbWluIiwiaWF0IjoxNzQ3Mzc0NDczLCJleHAiOjE3NDc0NjA4NzN9.axILt283yqUQCwT6K5ahVGkkPBTAIgkvB4U50bA3keA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3001",
+			"type": "string"
+		}
+	]
+}
