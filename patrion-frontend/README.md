@@ -19,26 +19,19 @@ Patrion IoT Sensör İzleme Panosu, endüstriyel ortamlardaki sıcaklık ve nem 
 Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görüntüleyebilirsiniz.
 
 ### Docker ile Kurulum
-
-1. İlk olarak projeyi klonlayın:
-   ```bash
-   git clone https://github.com/your-username/patrion-frontend.git
-   cd patrion-frontend
-   ```
-
-2. Docker ile uygulamayı ayağa kaldırın:
+1. Docker ile uygulamayı ayağa kaldırın:
    ```bash
    docker-compose up -d
    ```
 
-3. Uygulama http://localhost:3000 adresinde çalışmaya başlayacaktır.
+2. Uygulama http://localhost:3000 adresinde çalışmaya başlayacaktır.
 
-4. Docker loglarını kontrol etmek için:
+3. Docker loglarını kontrol etmek için:
    ```bash
    docker-compose logs -f
    ```
 
-5. Uygulamayı durdurmak için:
+4. Uygulamayı durdurmak için:
    ```bash
    docker-compose down
    ```

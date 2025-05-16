@@ -37,26 +37,12 @@ Bu IoT platformu aşağıdaki bileşenlerden oluşmaktadır:
 
 ### Docker ile Kurulum
 
-1. Depoyu klonlayın:
-
-```bash
-git clone <repo-url>
-cd patrion-backend-case-nodejs
-```
-
-2. SSL sertifikalarını oluşturun:
-
-```bash
-mkdir -p ssl
-openssl req -new -x509 -days 365 -nodes -out ssl/mqtt-broker.crt -keyout ssl/mqtt-broker.key -subj "/CN=localhost"
-```
-
-3. Docker Compose ile servisleri başlatın:
+1. Docker Compose ile servisleri başlatın:
 
 ```bash
 docker-compose up -d
 ```
-4. Dummy Data oluşturmak için 
+2. Dummy Data oluşturmak için 
 
 ```bash
 docker exec -it patrion_mosquitto_client /bin/sh -c "cd /mqtt-scripts && chmod +x simulate-sensor.sh && sh simulate-sensor.sh"
