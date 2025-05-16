@@ -1,6 +1,6 @@
 #!/bin/sh
 
-INTERVAL=60
+INTERVAL=30
 SENSOR_1="temp_sensor_01"
 SENSOR_2="temp_sensor_02"
 SENSOR_3="temp_sensor_03"
