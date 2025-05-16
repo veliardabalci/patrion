@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Veritabanı
+  postgres:
+    image: postgres:latest
+    container_name: patrion_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: patrion_case_study
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - patrion-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # NestJS API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: patrion_api
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=patrion_case_study
+      - JWT_SECRET=patrion_case_study
+      - JWT_REFRESH_SECRET=patrion_case_study_refresh
+      # MQTT Configuration - TLS enabled
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=8883
+      - MQTT_USE_TLS=true
+      - MQTT_URL=mqtts://mosquitto:8883
+      - PORT=3001
+    volumes:
+      - ./ssl:/app/ssl
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - patrion-network
+
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: patrion_mosquitto
+    ports:
+      - "1883:1883" # MQTT
+      - "8883:8883" # MQTT over TLS/SSL
+      - "9001:9001" # MQTT over WebSockets
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./ssl:/mosquitto/certs
+    networks:
+      - patrion-network
+
+  # Mosquitto Client için Test Aracı
+  mosquitto-client:
+    image: eclipse-mosquitto:latest
+    container_name: patrion_mosquitto_client
+    entrypoint: /bin/sh
+    tty: true
+    depends_on:
+      - mosquitto
+    networks:
+      - patrion-network
+    # Kullanımı:
+    # docker-compose exec mosquitto-client /bin/sh
+    # mosquitto_sub -h mosquitto -t 'patrion/#' -v  # Tüm mesajları dinlemek için
+    # mosquitto_pub -h mosquitto -t 'patrion/test' -m 'Hello MQTT'  # Mesaj göndermek için
+    volumes:
+    - ./mqtt-scripts:/mqtt-scripts
+    - ./ssl:/mosquitto/certs
+
+  # MQTT Explorer - Web Tabanlı MQTT İzleme Aracı
+  mqtt-explorer:
+    image: smeagolworms4/mqtt-explorer
+    container_name: patrion_mqtt_explorer
+    ports:
+      - "4000:4000"
+    environment:
+      - HTTP_PORT=4000
+      - DEFAULT_HOST=mosquitto
+      - DEFAULT_PORT=8883
+      - DEFAULT_SSL=true
+    depends_on:
+      - mosquitto
+    networks:
+      - patrion-network
+    # Web arayüzü: http://localhost:4000
+
+networks:
+  patrion-network:
+    driver: bridge
+
+volumes:
+  postgres_data: 
