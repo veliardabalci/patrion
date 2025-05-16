@@ -10,7 +10,7 @@ const nextConfig = {
     ignoreBuildErrors: false, // TypeScript hatalarını build'i engellemesi için false bırakın
   },
   images: {
-    domains: ['localhost'], // Eğer harici resim kullanıyorsanız buraya eklemeyi unutmayın
+    domains: ['18.184.139.251'], 
   },
   // API proxy ayarları (opsiyonel)
   async rewrites() {
