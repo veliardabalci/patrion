@@ -39,7 +39,7 @@ class WebSocketService {
       }
       
       // Socket.IO yapılandırması
-      this.socket = io('ws://localhost:3001/sensors', {
+      this.socket = io('ws://18.184.139.251:3001/sensors', {
         auth: {
           token // JWT token'ı auth nesnesi içinde gönder
         },

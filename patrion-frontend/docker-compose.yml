@@ -12,8 +12,8 @@ services:
     environment:
       - NODE_ENV=production
       # Backend API URL ve diğer ortam değişkenleri
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3001}
-      - NEXT_PUBLIC_WEBSOCKET_URL=${NEXT_PUBLIC_WEBSOCKET_URL:-ws://localhost:3001}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://18.184.139.251:3001}
+      - NEXT_PUBLIC_WEBSOCKET_URL=${NEXT_PUBLIC_WEBSOCKET_URL:-ws://18.184.139.251:3001}
     networks:
       - patrion-network
 

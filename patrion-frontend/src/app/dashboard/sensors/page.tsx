@@ -31,7 +31,7 @@ export default function SensorsPage() {
         }
         
         // WebSocket URL ve auth token
-        const socket = io('ws://localhost:3001/sensors', {
+        const socket = io('ws://18.184.139.251:3001/sensors', {
           auth: {
             token // JWT token'ı auth nesnesi içinde gönder
           },

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthResponse, Company, LoginRequest, RegisterRequest, User, SensorData, SensorReading, SensorCreateRequest } from '../types';
 import { getCookie, setCookie, eraseCookie } from '../utils/cookies';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://18.184.139.251:3001';
 
 const api = axios.create({
   baseURL: API_URL,
