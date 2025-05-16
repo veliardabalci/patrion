@@ -20,11 +20,15 @@ import { UserRole } from '../users/entities/user.entity';
 import { CreateSensorDto } from './dto/create-sensor.dto';
 import { UpdateSensorDto } from './dto/update-sensor.dto';
 import { SensorUserAccessDto, RemoveSensorUserAccessDto } from './dto/sensor-user-access.dto';
+import { LogsService } from '../logs/logs.service';
 
 @Controller('sensors')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SensorsController {
-  constructor(private readonly sensorsService: SensorsService) {}
+  constructor(
+    private readonly sensorsService: SensorsService,
+    private readonly logsService: LogsService
+  ) {}
 
   // Sensör yönetimi endpointleri
   @Post()
@@ -108,6 +112,9 @@ export class SensorsController {
     if (!hasAccess) {
       throw new ForbiddenException('Bu sensöre erişim izniniz bulunmamaktadır');
     }
+
+    // Log the access
+    await this.logsService.createLog(user.id, id, 'viewed_sensor_details');
     
     return this.sensorsService.findSensorByIdWithLatestData(id);
   }
@@ -139,22 +146,30 @@ export class SensorsController {
 
   @Get(':sensorId/latest')
   @Roles(UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN, UserRole.USER)
-  getLatestData(
+  async getLatestData(
     @Param('sensorId') sensorId: string,
+    @Req() req,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
+    // Log the access to sensor data
+    await this.logsService.createLog(req.user.id, sensorId, 'viewed_latest_data');
+    
     return this.sensorsService.getLatestDataForSensor(sensorId, limit || 10);
   }
 
   @Get(':sensorId/range')
   @Roles(UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN, UserRole.USER)
-  getSensorDataInRange(
+  async getSensorDataInRange(
     @Param('sensorId') sensorId: string,
     @Query('start') startTimestamp: string,
     @Query('end') endTimestamp: string,
+    @Req() req
   ) {
     const startDate = new Date(parseInt(startTimestamp) * 1000);
     const endDate = new Date(parseInt(endTimestamp) * 1000);
+    
+    // Log the access to sensor data
+    await this.logsService.createLog(req.user.id, sensorId, 'viewed_range_data');
     
     return this.sensorsService.getSensorDataInTimeRange(sensorId, startDate, endDate);
   }

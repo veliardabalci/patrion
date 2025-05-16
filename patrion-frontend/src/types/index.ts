@@ -132,4 +132,13 @@ export interface SensorPermission {
   grantedBy?: string;
   grantedByName?: string;
   createdBy?: string;
+}
+
+export interface Log {
+  id: string;
+  userId: string;
+  user: User;
+  sensorId: string | null;
+  action: string;
+  timestamp: string;
 } 

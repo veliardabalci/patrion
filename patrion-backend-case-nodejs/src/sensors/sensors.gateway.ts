@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SocketJwtMiddleware } from '../auth/socket-jwt.middlewate';
 import { UsersService } from '../users/users.service';
 import { User, UserRole } from '../users/entities/user.entity';
+import { LogsService } from '../logs/logs.service';
 
 interface EnrichedSensor extends Sensor {
   latestData?: any;
@@ -33,7 +34,8 @@ export class SensorsGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   constructor(
     private readonly sensorsService: SensorsService,
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly logsService: LogsService
   ) {}
 
   afterInit(server: Server) {
@@ -144,6 +146,9 @@ export class SensorsGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       
       this.logger.log(`Client ${client.id} (${user.email}) subscribed to sensor ${sensorId}`);
       
+      // Log the subscription
+      await this.logsService.createLog(user.id, sensorId, 'subscribed_to_sensor');
+      
       // Abone olduğu sensörün en son verilerini gönder
       const latestData = await this.sensorsService.getLatestDataForSensor(sensorId, 1);
       if (latestData && latestData.length > 0) {
@@ -194,11 +199,14 @@ export class SensorsGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       if (!hasAccess) {
         return { success: false, message: 'Bu sensöre erişim izniniz bulunmamaktadır' };
       }
+
+      // Log the data access
+      await this.logsService.createLog(user.id, payload.sensorId, 'viewed_logs');
   
       const data = await this.sensorsService.getLatestDataForSensor(payload.sensorId, payload.limit || 10);
       return { success: true, data };
     } catch (error) {
-      this.logger.error(`Error getting sensor data: ${error.message}`, error.stack);
+      this.logger.error(`Error retrieving sensor data: ${error.message}`, error.stack);
       return { success: false, message: error.message };
     }
   }

@@ -13,6 +13,7 @@ import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { LogsModule } from '../logs/logs.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '1d' },
       }),
     }),
-    forwardRef(() => AuthModule), 
+    forwardRef(() => AuthModule),
+    LogsModule,
   ],
   controllers: [SensorsController],
   providers: [SensorsService, SensorsGateway],

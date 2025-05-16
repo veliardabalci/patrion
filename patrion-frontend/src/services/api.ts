@@ -327,4 +327,40 @@ export const permissionsApi = {
     const response = await api.get('/sensors/my-access');
     return response.data;
   }
+};
+
+// Sistem logları API
+export const logsApi = {
+  // Tüm logları getir
+  getAll: async (): Promise<any[]> => {
+    const response = await api.get('/logs');
+    return response.data;
+  },
+  
+  // Filtreli log getirme
+  getFiltered: async (params: { userId?: string, sensorId?: string, action?: string, startDate?: string, endDate?: string }): Promise<any[]> => {
+    const queryParams = new URLSearchParams();
+    
+    if (params.userId) queryParams.append('userId', params.userId);
+    if (params.sensorId) queryParams.append('sensorId', params.sensorId);
+    if (params.action) queryParams.append('action', params.action);
+    if (params.startDate) queryParams.append('startDate', params.startDate);
+    if (params.endDate) queryParams.append('endDate', params.endDate);
+    
+    const url = `/logs?${queryParams.toString()}`;
+    const response = await api.get(url);
+    return response.data;
+  },
+  
+  // Belirli bir sensörün loglarını getirme
+  getSensorLogs: async (sensorId: string): Promise<any[]> => {
+    const response = await api.get(`/logs/sensor/${sensorId}`);
+    return response.data;
+  },
+  
+  // Belirli bir kullanıcının loglarını getirme
+  getUserLogs: async (userId: string): Promise<any[]> => {
+    const response = await api.get(`/logs/user/${userId}`);
+    return response.data;
+  }
 }; 

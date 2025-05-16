@@ -16,6 +16,7 @@ import {
   DeviceTabletIcon,
   KeyIcon,
   UserCircleIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types';
@@ -35,6 +36,7 @@ const navigation: NavigationItem[] = [
   { name: 'Şirket Kullanıcıları', href: '/dashboard/company-users', icon: UsersIcon, roles: [UserRole.COMPANY_ADMIN] },
   { name: 'Sensör İzinleri', href: '/dashboard/permissions', icon: KeyIcon, roles: [UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN] },
   { name: 'IoT Sensörleri', href: '/dashboard/sensors', icon: DeviceTabletIcon, roles: [UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN, UserRole.USER] },
+  { name: 'Sistem Logları', href: '/dashboard/logs', icon: ClipboardDocumentListIcon, roles: [UserRole.SYSTEM_ADMIN] },
   { name: 'Profilim', href: '/dashboard/profile', icon: UserCircleIcon, roles: [UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN, UserRole.USER] },
 ];
 

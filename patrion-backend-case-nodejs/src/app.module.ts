@@ -10,6 +10,7 @@ import { TokenBlacklistMiddleware } from './auth/middlewares/token-blacklist.mid
 import { HealthModule } from './health/health.module';
 import { MqttModule } from './mqtt/mqtt.module';
 import { SensorsModule } from './sensors/sensors.module';
+import { LogsModule } from './logs/logs.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
@@ -34,6 +35,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     HealthModule,
     MqttModule,
     SensorsModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
