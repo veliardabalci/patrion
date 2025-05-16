@@ -339,17 +339,26 @@ export const logsApi = {
   
   // Filtreli log getirme
   getFiltered: async (params: { userId?: string, sensorId?: string, action?: string, startDate?: string, endDate?: string }): Promise<any[]> => {
-    const queryParams = new URLSearchParams();
-    
-    if (params.userId) queryParams.append('userId', params.userId);
-    if (params.sensorId) queryParams.append('sensorId', params.sensorId);
-    if (params.action) queryParams.append('action', params.action);
-    if (params.startDate) queryParams.append('startDate', params.startDate);
-    if (params.endDate) queryParams.append('endDate', params.endDate);
-    
-    const url = `/logs?${queryParams.toString()}`;
-    const response = await api.get(url);
-    return response.data;
+    try {
+      const queryParams = new URLSearchParams();
+      
+      // Only append parameters that are defined
+      if (params.userId) queryParams.append('userId', params.userId);
+      if (params.sensorId) queryParams.append('sensorId', params.sensorId);
+      if (params.action) queryParams.append('action', params.action);
+      if (params.startDate) queryParams.append('startDate', params.startDate);
+      if (params.endDate) queryParams.append('endDate', params.endDate);
+      
+      const queryString = queryParams.toString();
+      const url = queryString ? `/logs?${queryString}` : '/logs';
+      
+      console.log('Fetching logs with URL:', url);
+      const response = await api.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching filtered logs:', error);
+      return [];
+    }
   },
   
   // Belirli bir sensörün loglarını getirme

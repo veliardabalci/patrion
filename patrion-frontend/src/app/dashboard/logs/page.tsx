@@ -91,6 +91,44 @@ export default function LogsPage() {
           setViewTitle('Tüm Loglar');
         }
         
+        // Eksik kullanıcı bilgilerini tamamla
+        logsData = logsData.map(log => {
+          // Eğer log.user yoksa ve log.userId varsa, kullanıcı bilgisini ekle
+          if (!log.user && log.userId) {
+            const foundUser = usersData.find(u => u.id === log.userId);
+            if (foundUser) {
+              return { ...log, user: foundUser };
+            }
+          }
+          return log;
+        });
+        
+        // İşlem tipi filtresi varsa, JavaScript tarafında filtrele
+        if (filters.action && logsData.length > 0) {
+          logsData = logsData.filter(log => log.action === filters.action);
+        }
+        
+        // Tarih filtresi varsa, JavaScript tarafında filtrele
+        if (filters.startDate || filters.endDate) {
+          logsData = logsData.filter(log => {
+            const logDate = new Date(log.timestamp);
+            
+            if (filters.startDate && filters.endDate) {
+              const startDate = new Date(filters.startDate);
+              const endDate = new Date(filters.endDate);
+              return logDate >= startDate && logDate <= endDate;
+            } else if (filters.startDate) {
+              const startDate = new Date(filters.startDate);
+              return logDate >= startDate;
+            } else if (filters.endDate) {
+              const endDate = new Date(filters.endDate);
+              return logDate <= endDate;
+            }
+            
+            return true;
+          });
+        }
+        
         setLogs(logsData);
         setTotalPages(Math.ceil(logsData.length / logsPerPage));
         setCurrentPage(1);
@@ -106,7 +144,7 @@ export default function LogsPage() {
     if (user) {
       fetchData();
     }
-  }, [user, router, viewMode, viewId]);
+  }, [user, router, viewMode, viewId, filters.action, filters.startDate, filters.endDate]);
   
   // Apply filters
   const applyFilters = async () => {
@@ -114,12 +152,79 @@ export default function LogsPage() {
       setLoading(true);
       setError(null);
       
-      // Remove empty filters
-      const filterParams = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== '')
-      );
+      let filteredLogs: Log[] = [];
       
-      const filteredLogs = await logsApi.getFiltered(filterParams);
+      // Kullanıcı filtresi seçilmişse
+      if (filters.userId) {
+        console.log('Filtering logs by user ID:', filters.userId);
+        filteredLogs = await logsApi.getUserLogs(filters.userId);
+        setViewMode('user');
+        setViewId(filters.userId);
+        
+        // Kullanıcı adını bul
+        const selectedUser = users.find(u => u.id === filters.userId);
+        if (selectedUser) {
+          setViewTitle(`${selectedUser.firstName} ${selectedUser.lastName} Kullanıcısının Logları`);
+        }
+      } 
+      // Sensör filtresi seçilmişse
+      else if (filters.sensorId) {
+        console.log('Filtering logs by sensor ID:', filters.sensorId);
+        filteredLogs = await logsApi.getSensorLogs(filters.sensorId);
+        setViewMode('sensor');
+        setViewId(filters.sensorId);
+        setViewTitle(`${filters.sensorId} Sensörünün Logları`);
+      } 
+      // Her ikisi de seçilmemişse, tüm logları getir
+      else {
+        console.log('No user or sensor filter applied, fetching all logs');
+        filteredLogs = await logsApi.getAll();
+        setViewMode('all');
+        setViewId(null);
+        setViewTitle('Tüm Loglar');
+      }
+      
+      // Eksik kullanıcı bilgilerini tamamla
+      filteredLogs = filteredLogs.map(log => {
+        // Eğer log.user yoksa ve log.userId varsa, kullanıcı bilgisini ekle
+        if (!log.user && log.userId) {
+          const foundUser = users.find(u => u.id === log.userId);
+          if (foundUser) {
+            return { ...log, user: foundUser };
+          }
+        }
+        return log;
+      });
+      
+      // İşlem tipi filtresi varsa, JavaScript tarafında filtrele
+      if (filters.action && filteredLogs.length > 0) {
+        console.log('Filtering by action type:', filters.action);
+        filteredLogs = filteredLogs.filter(log => log.action === filters.action);
+      }
+      
+      // Tarih filtresi varsa, JavaScript tarafında filtrele
+      if (filters.startDate || filters.endDate) {
+        filteredLogs = filteredLogs.filter(log => {
+          const logDate = new Date(log.timestamp);
+          
+          if (filters.startDate && filters.endDate) {
+            const startDate = new Date(filters.startDate);
+            const endDate = new Date(filters.endDate);
+            return logDate >= startDate && logDate <= endDate;
+          } else if (filters.startDate) {
+            const startDate = new Date(filters.startDate);
+            return logDate >= startDate;
+          } else if (filters.endDate) {
+            const endDate = new Date(filters.endDate);
+            return logDate <= endDate;
+          }
+          
+          return true;
+        });
+      }
+      
+      console.log('Received filtered logs:', filteredLogs.length);
+      
       setLogs(filteredLogs);
       setTotalPages(Math.ceil(filteredLogs.length / logsPerPage));
       setCurrentPage(1);
@@ -133,6 +238,7 @@ export default function LogsPage() {
   };
   
   const resetFilters = async () => {
+    // Reset filter form values
     setFilters({
       userId: '',
       sensorId: '',
@@ -144,14 +250,20 @@ export default function LogsPage() {
     // Reset view mode
     setViewMode('all');
     setViewId(null);
+    setViewTitle('Tüm Loglar');
     
     try {
       setLoading(true);
+      setError(null);
+      
+      console.log('Resetting filters and fetching all logs');
+      // Her zaman tüm logları getir
       const logsData = await logsApi.getAll();
+      console.log('Received all logs:', logsData.length);
+      
       setLogs(logsData);
       setTotalPages(Math.ceil(logsData.length / logsPerPage));
       setCurrentPage(1);
-      setViewTitle('Tüm Loglar');
     } catch (err) {
       console.error('Error resetting filters:', err);
       setError('Filtreler sıfırlanırken bir hata oluştu');
@@ -169,15 +281,100 @@ export default function LogsPage() {
   };
   
   // View logs by user
-  const viewUserLogs = (userId: string) => {
-    setViewMode('user');
-    setViewId(userId);
+  const viewUserLogs = async (userId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      console.log('Viewing logs for user:', userId);
+      setViewMode('user');
+      setViewId(userId);
+      
+      // Kullanıcı loglarını getir
+      const userLogs = await logsApi.getUserLogs(userId);
+      
+      // Kullanıcı adını bul
+      const viewUser = users.find(u => u.id === userId);
+      if (viewUser) {
+        setViewTitle(`${viewUser.firstName} ${viewUser.lastName} Kullanıcısının Logları`);
+      }
+      
+      // Eksik kullanıcı bilgilerini tamamla
+      const processedLogs = userLogs.map(log => {
+        // Eğer log.user yoksa ve log.userId varsa, kullanıcı bilgisini ekle
+        if (!log.user && log.userId) {
+          const foundUser = users.find(u => u.id === log.userId);
+          if (foundUser) {
+            return { ...log, user: foundUser };
+          }
+        }
+        return log;
+      });
+      
+      setLogs(processedLogs);
+      setTotalPages(Math.ceil(processedLogs.length / logsPerPage));
+      setCurrentPage(1);
+      
+      // Filtreleri sıfırla ama userId'yi koru
+      setFilters({
+        userId: userId,
+        sensorId: '',
+        action: '',
+        startDate: '',
+        endDate: '',
+      });
+    } catch (err) {
+      console.error('Error fetching user logs:', err);
+      setError('Kullanıcı logları yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
   };
   
   // View logs by sensor
-  const viewSensorLogs = (sensorId: string) => {
-    setViewMode('sensor');
-    setViewId(sensorId);
+  const viewSensorLogs = async (sensorId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      console.log('Viewing logs for sensor:', sensorId);
+      setViewMode('sensor');
+      setViewId(sensorId);
+      setViewTitle(`${sensorId} Sensörünün Logları`);
+      
+      // Sensör loglarını getir
+      const sensorLogs = await logsApi.getSensorLogs(sensorId);
+      
+      // Eksik kullanıcı bilgilerini tamamla
+      const processedLogs = sensorLogs.map(log => {
+        // Eğer log.user yoksa ve log.userId varsa, kullanıcı bilgisini ekle
+        if (!log.user && log.userId) {
+          const foundUser = users.find(u => u.id === log.userId);
+          if (foundUser) {
+            return { ...log, user: foundUser };
+          }
+        }
+        return log;
+      });
+      
+      setLogs(processedLogs);
+      setTotalPages(Math.ceil(processedLogs.length / logsPerPage));
+      setCurrentPage(1);
+      
+      // Filtreleri sıfırla ama sensorId'yi koru
+      setFilters({
+        userId: '',
+        sensorId: sensorId,
+        action: '',
+        startDate: '',
+        endDate: '',
+      });
+    } catch (err) {
+      console.error('Error fetching sensor logs:', err);
+      setError('Sensör logları yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
   };
   
   // Format timestamp
@@ -442,9 +639,9 @@ export default function LogsPage() {
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm">
                             <div className="font-medium text-gray-900">
-                              {log.user.firstName} {log.user.lastName}
+                              {log.user ? `${log.user.firstName} ${log.user.lastName}` : 'Bilinmeyen Kullanıcı'}
                             </div>
-                            <div className="text-gray-500">{log.user.email}</div>
+                            <div className="text-gray-500">{log.user ? log.user.email : '-'}</div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {getActionDisplayName(log.action)}

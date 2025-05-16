@@ -88,19 +88,6 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="/dashboard/settings"
-                      className={classNames(
-                        active ? 'bg-gray-50' : '',
-                        'block px-3 py-1 text-sm leading-6 text-gray-900'
-                      )}
-                    >
-                      Ayarlar
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
                     <button
                       onClick={async () => {
                         await logout();
